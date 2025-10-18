@@ -47,7 +47,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging();
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection();  
+
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["Referrer-Policy"] = "no-referrer-when-downgrade";
+    context.Response.Headers["Permissions-Policy"] = "geolocation=(), camera=()";
+    context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+    await next();
+});
 
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 

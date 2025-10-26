@@ -44,6 +44,10 @@ if (app.Environment.IsDevelopment())
         option.SwaggerEndpoint("/swagger/v1/swagger.json", "BritInsurance API V1");
     });
 }
+else
+{
+    app.UseHsts();
+}
 
 app.UseSerilogRequestLogging();
 
